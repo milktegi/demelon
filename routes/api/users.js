@@ -6,23 +6,23 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 
-// load input validation 
+// load input validation
 const validateRegisterInput = require('../../validation/register');
+const validateLoginInput = require('../../validation/Login');
 
 // load user model
 const User = require('../../models/User');
 
 router.post('/register', (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
 
-  const { errors, isValid } = validateRegisterInput(req.body);	
-
-  if(!isValid) {
-	  return res.status(400).json(errors);
+  if (!isValid) {
+    return res.status(400).json(errors);
   }
 
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-	  errors.email = '이미 등록된 이메일입니다';
+      errors.email = '이미 등록된 이메일입니다';
       return res.status(400).json(errors);
     } else {
       const avatar = gravatar.url(req.body.email, {
@@ -58,13 +58,20 @@ router.post('/register', (req, res) => {
 // @access Public
 
 router.post('/login', (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const email = req.body.email;
   const password = req.body.password;
 
   // find user by email
   User.findOne({ email }).then(user => {
     if (!user) {
-      return res.status(404).json({ email: '등록되지 않은 계정' });
+      errors.email = '미등록 계정입니다.';
+      return res.status(404).json(errors);
     }
 
     bcrypt.compare(password, user.password).then(isMatch => {
@@ -82,7 +89,9 @@ router.post('/login', (req, res) => {
           }
         );
       } else {
-        return res.status(400).json({ password: '패스워드 불일치' });
+        errors.password = '패스워드 불일치';
+        return res.status(400).json(errors);
+		
       }
     });
   });
@@ -96,10 +105,10 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     res.json({
-		id: req.user.id,
-		name: req.user.name,
-		email: req.user.email
-	})
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email
+    });
   }
 );
 
