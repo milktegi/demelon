@@ -1,11 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const passport = require('passport');
-
+const bodyParser = require('body-parser');
 const app = express();
-require('./routes/api/users')(app);
-require('./routes/api/profile');
-require('./routes/api/posts');
+const users = require('./routes/api/users');
+const profile = require('./routes/api/profile');
+const posts = require('./routes/api/posts');
+
+// Body parser middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // DB config
 const db = require('./config/keys').mongoURI;
@@ -16,15 +19,15 @@ mongoose
   .then(() => console.log('mongodb connected!'))
   .catch(err => console.log(err));
 
-
 app.get('/', (req, res) => {
   res.send({ hello: 'egi' });
 });
 
-// Use Routes 
+// Use Routes
 
-app.use(passport.initialize());
-app.use(passport.session());
+app.use('/api/users', users);
+app.use('/api/users', profile);
+app.use('/api/users', posts);
 
 const port = process.env.PORT || 5001;
 
