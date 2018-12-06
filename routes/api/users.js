@@ -6,14 +6,24 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 
-// load user model
+// load input validation 
+const validateRegisterInput = require('../../validation/register');
 
+// load user model
 const User = require('../../models/User');
 
 router.post('/register', (req, res) => {
+
+  const { errors, isValid } = validateRegisterInput(req.body);	
+
+  if(!isValid) {
+	  return res.status(400).json(errors);
+  }
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      return res.status(400).json({ email: 'email already' });
+	  errors.email = '이미 등록된 이메일입니다';
+      return res.status(400).json(errors);
     } else {
       const avatar = gravatar.url(req.body.email, {
         s: '200', // size
