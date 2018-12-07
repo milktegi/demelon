@@ -42,11 +42,11 @@ const ProfileSchema = new Schema({
         required: true
       },
       company: {
-        type: String
-      },
-      location: {
         type: String,
         required: true
+      },
+      location: {
+        type: String
       },
       from: {
         type: Date,
