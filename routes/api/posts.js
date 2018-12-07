@@ -37,4 +37,25 @@ router.post(
   }
 );
 
+//@route  Get api/posts
+//@desc   get post
+//@access Private
+
+router.get('/', (req, res) => {
+  Post.find()
+    .sort({ data: -1 })
+    .then(posts => res.json(posts))
+    .catch(err => res.status(404).json({ nopostfound: '게시물이 존재하지 않습니다'}));
+});
+
+//@route  Get api/posts/:id
+//@desc   get postbyid
+//@access Private
+
+router.get('/:id', (req, res) => {
+  Post.findById(req.params.id)
+    .then(post => res.json(post))
+    .catch(err => res.status(404).json({ nopostfound: '게시물이 존재하지 않습니다'}));
+});
+
 module.exports = router;
