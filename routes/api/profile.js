@@ -14,6 +14,7 @@ const Profile = require('../../models/Profile');
 // load user profile model
 const User = require('../../models/User');
 
+
 // @route 	GET api/profile
 // @desc 	Get current user profile
 // @access 	Private
