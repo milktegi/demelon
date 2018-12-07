@@ -26,6 +26,11 @@ module.exports = function validateProfileInput(data) {
       errors.website = 'not a valid url!';
     }
   }
+  if (!isEmpty(data.youtube)) {
+    if (!Validator.isURL(data.youtube)) {
+      errors.youtube = 'not a valid url!';
+    }
+  }
   if (!isEmpty(data.twitter)) {
     if (!Validator.isURL(data.twitter)) {
       errors.twitter = 'not a valid url!';

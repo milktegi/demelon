@@ -11,14 +11,6 @@ const Profile = require('../../models/Profile');
 // load user profile model
 const User = require('../../models/User');
 
-// @route 	GET api/profile/test
-// @desc 	Tests profile route
-// @access 	Public
-
-router.get('/test', (req, res) => {
-  res.json({ message: 'profile works!' });
-});
-
 // @route 	GET api/profile
 // @desc 	Get current user profile
 // @access 	Private
@@ -29,16 +21,82 @@ router.get(
   (req, res) => {
     const errors = {};
     Profile.findOne({ user: req.user.id })
+      .populate('user', ['name', 'avatar'])
       .then(profile => {
         if (!profile) {
-          errors.noprofile = '프로필이 존재하지 않습니다';
-          return res.status(404).json(errors);
+          errors.noprofile = '해당 유저의 프로파일이 존재하지 않습니다';
+          res.status(404).json(errors);
         }
         res.json(profile);
       })
       .catch(err => res.status(404).json(err));
   }
 );
+
+// backend
+
+// @route 	GET api/profile/handle/:handle
+// @desc 	  get profile by handle
+// @access 	Public - no passport auth
+
+router.get('/handle/:handle', (req, res) => {
+  const errors = {};
+  Profile.findOne({ handle: req.params.handle })
+    .populate('user', ['name', 'avatar'])
+    .then(profile => {
+      if (!profile) {
+        errors.noprofile = '해당 유저의 프로파일이 존재하지 않습니다.';
+        res.status(404).json(errors);
+      }
+      res.json(profile);
+    })
+    .catch(err => res.status(404).json(err));
+});
+
+// backend
+
+// @route 	GET api/profile/iser/:user_id
+// @desc 	  profile by handle
+// @access 	Public - no passport auth
+
+router.get('/user/:user_id', (req, res) => {
+  Profile.findOne({ handle: req.params.user_id })
+    .populate('user', ['name', 'avatar'])
+    .then(profile => {
+      if (!profile) {
+        errors.noprofile = '해당 유저의 프로파일이 존재하지 않습니다.';
+        res.status(404).json(errors);
+      }
+      res.json(profile);
+    })
+    .catch(err =>
+      res
+        .status(404)
+        .json({ profile: '해당 유저의 프로필은 존재하지 않습니다.' })
+    );
+});
+
+// @route 	GET api/profile/all
+// @desc 	  get all profiles
+// @access 	Public - no passport auth
+
+router.get('/all', (req, res) => {
+  const errors = {};
+  Profile.find()
+    .populate()
+    .then(profiles => {
+      if (!profiles) {
+        errors.noprofile = '해당 유저의 프로필은 존재하지 않습니다.';
+        res.status(404).json(errors);
+      }
+      res.json(profiles);
+    })
+    .catch(err => {
+      res
+        .status(404)
+        .json({ profile: '해당 유저의 프로필은 존재하지 않습니다.' });
+    });
+});
 
 // @route 	POST api/profile
 // @desc 	Get current user profile
@@ -48,11 +106,11 @@ router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-	const { errors, isValid } = validateProfileInput(req.body);
-	if(!isValid) {
-		// return errors
-		return res.status(400).json(errors);
-	}
+    const { errors, isValid } = validateProfileInput(req.body);
+    if (!isValid) {
+      // return errors
+      return res.status(400).json(errors);
+    }
     // get fields
     const profileFields = {};
     profileFields.user = req.user.id;
@@ -78,14 +136,20 @@ router.post(
     if (req.body.linkedin) profileFields.social.linkedin = req.body.linkedin;
     if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
 
-    Profile.findeOne({ user: req.user.id }).then(profile => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
       if (profile) {
         // update
-        Profile.findeOneAndUpdate(
+        Profile.findOneAndUpdate(
           { user: req.user.id },
           { $set: profileFields },
           { new: true }
-        ).then(profile => res.json(profile));
+        )
+          .then(profile => res.json(profile))
+          .catch(err => {
+            res
+              .status(404)
+              .json({ profile: '해당 유저의 프로필은 존재하지 않습니다.' });
+          });
       } else {
         // create
 
