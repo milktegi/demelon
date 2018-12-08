@@ -1,3 +1,8 @@
+h5 {
+  font-size: 100%;
+  font-family: 나눔스퀘어 Extrabold;
+
+}
 
 body {
   font-family: 나눔스퀘어;
@@ -5,6 +10,10 @@ body {
 
 img {
   width: 100%;
+}
+
+.register {
+  margin-top: 4em;
 }
 
 .landing {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class Register extends Component {
   constructor() {
@@ -8,52 +9,54 @@ class Register extends Component {
       email: '',
       password: '',
       password2: '',
-      errors: {}
+      error: {}
     };
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onChange() {
+
+
+  onSubmit = e => {
+    e.preventDefault();
+    const newUser = {
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      password2: this.state.password2
+    };
+    
+
+    axios.post('/api/users/register', newUser)
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err.response.data));
+  };
+
+  onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-  }
-
-  onSubmit(e) {
-	  e.preventDefault();
-
-	  const newUser = {
-		  name: this.state.name,
-		  email: this.state.email,
-		  password: this.state.password,
-		  password2: this.state.password2,
-		  errors: {}
-	  }
-  }
-
+  };
   render() {
     return (
-      <div class="register">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-8 m-auto">
-              <h1 class="display-4 text-center">Sign Up</h1>
-              <p class="lead text-center">Create your DevConnector account</p>
+      <div className="register">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-8 m-auto">
+              <h5 className="display-4 text-center">회원가입🤔</h5>
+              <p className="lead text-center">지금 바로 계정을 등록하세요.</p>
               <form onSubmit={this.onSubmit}>
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="text"
-                    class="form-control form-control-lg"
-                    placeholder="Name"
+                    className="form-control form-control-lg"
+                    placeholder="이름(실명)"
                     name="name"
                     value={this.state.name}
                     onChange={this.onChange}
                   />
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="email"
-                    class="form-control form-control-lg"
-                    placeholder="Email Address"
+                    className="form-control form-control-lg"
+                    placeholder="이메일 계정"
                     name="email"
                     value={this.state.email}
                     onChange={this.onChange}
@@ -63,27 +66,27 @@ class Register extends Component {
                     a Gravatar email
                   </small>
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="password"
-                    class="form-control form-control-lg"
-                    placeholder="Password"
+                    className="form-control form-control-lg"
+                    placeholder="패스워드"
                     name="password"
-                    value={this.state.passowrd}
+                    value={this.state.password}
                     onChange={this.onChange}
                   />
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="password"
-                    class="form-control form-control-lg"
-                    placeholder="Confirm Password"
+                    className="form-control form-control-lg"
+                    placeholder="패스워드 확인"
                     name="password2"
                     value={this.state.password2}
                     onChange={this.onChange}
                   />
                 </div>
-                <input type="submit" class="btn btn-info btn-block mt-4" />
+                <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
             </div>
           </div>
