@@ -26,7 +26,7 @@ module.exports = function validateRegisterInput(data) {
     errors.password = '패스워드는 최소 6자리 이상입니다';
   }
    if (Validator.isEmpty(data.password2)) {
-    errors.password = '패스워드를 바르게 입력해주세요';
+    errors.password2 = '패스워드를 바르게 입력해주세요';
   }
   if (!Validator.equals(data.password, data.password2)) {
     errors.password2 = '패스워드 불일치';
