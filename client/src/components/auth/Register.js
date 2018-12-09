@@ -17,6 +17,12 @@ class Register extends Component {
     };
   }
 
+  componentDidMount = () => {
+    if(this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
+
   componentWillRecieveProps = nextProps => {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
@@ -47,7 +53,7 @@ class Register extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <h5 className="display-4 text-center">회원가입🤔</h5>
+              <h5 className="display-4 text-center">회원가입<span>🤔</span></h5>
               <p className="lead text-center">지금 바로 계정을 등록하세요.</p>
               <form noValidate onSubmit={this.onSubmit}>
                 <div className="form-group">
