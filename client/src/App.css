@@ -5,11 +5,21 @@ h5 {
 }
 
 body {
+
   font-family: 나눔스퀘어;
 }
 
 img {
   width: 100%;
+}
+
+.login{
+  margin-top: 4em;
+}
+
+
+.create-profile{
+  margin-top: 4em;
 }
 
 .register {
