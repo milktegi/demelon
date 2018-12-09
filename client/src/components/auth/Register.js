@@ -17,6 +17,16 @@ class Register extends Component {
     };
   }
 
+  componentWillRecieveProps = nextProps => {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  };
+
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
   onSubmit = e => {
     e.preventDefault();
     const newUser = {
@@ -27,21 +37,7 @@ class Register extends Component {
     };
 
     this.props.registerUser(newUser, this.props.history);
-    // axios
-    //   .post('/api/users/register', newUser)
-    //   .then(res => console.log(res.data))
-    //   .catch(err => this.setState({ errors: err.response.data }));
   };
-
-  onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
-  componentWillRecieveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
-    }
-  }
 
   render() {
     const { errors } = this.state;
@@ -128,7 +124,7 @@ class Register extends Component {
   }
 }
 
-Register.PropTypes = {
+Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
