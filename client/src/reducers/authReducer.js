@@ -1,18 +1,13 @@
-import { TEST_DISPATCH } from '../actions/types';
+import { GET_ERRORS } from '../actions/types';
+import axios from 'axios';
 
 const initialState = {
-  isAuthenticated: false,
-  user: {}
+
 };
 
 export default function(state = initialState, action) {
-  switch (action.type) {
-    case TEST_DISPATCH: 
-	return {
-		...state,
-		user: action.payload
+	switch(action.type) {
+		default: 
+		return state;
 	}
-    default:
-      return state;
-  }
 }
