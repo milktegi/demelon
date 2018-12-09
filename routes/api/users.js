@@ -22,7 +22,7 @@ router.post('/register', (req, res) => {
 
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      errors.email = '이미 등록된 이메일입니다';
+      errors.email = '미등록 이메일입니다';
       return res.status(400).json(errors);
     } else {
       const avatar = gravatar.url(req.body.email, {
@@ -44,7 +44,7 @@ router.post('/register', (req, res) => {
           newUser
             .save()
             .then(user => res.json(user))
-            .catch(err => console.log(err));
+            .catch(err => res.status(400).json(errors));
         });
       });
     }
