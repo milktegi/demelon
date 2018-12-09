@@ -32,6 +32,7 @@ TextAreaFieldGroup.propTypes = {
   placeholder: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   info: PropTypes.string,
+  error: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };
 
