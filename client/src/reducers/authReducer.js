@@ -1,13 +1,21 @@
-import { GET_ERRORS } from '../actions/types';
-import axios from 'axios';
+import { SET_CURRENT_USER } from '../actions/types';
+import isEmpty from '../validation/is-empty';
+
 
 const initialState = {
-
+  isAutenthicated: false,
+  user: {}
 };
 
 export default function(state = initialState, action) {
-	switch(action.type) {
-		default: 
-		return state;
-	}
+  switch (action.type) {
+    case SET_CURRENT_USER:
+      return {
+        ...state,
+        isAuthenticated: !isEmpty(action.payload),
+        user: action.payload
+      };
+    default:
+      return state;
+  }
 }

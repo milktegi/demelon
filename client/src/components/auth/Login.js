@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { loginUser } from '../../actions/authActions';
+import classnames from 'classnames';
 
 class Login extends Component {
   constructor() {
@@ -10,20 +14,34 @@ class Login extends Component {
     };
   }
 
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
+  onSubmit = e => {
+    e.preventDefault();
+
+    const userData = {
+      email: this.state.email,
+      password: this.state.password
+    };
+
+    this.props.loginUser(userData);
+  };
+
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  onSubmit = e => {
-    e.preventDefault();
-    const user = {
-      email: this.state.email,
-      password: this.state.password
-    };
-    console.log(user);
-  };
-
   render() {
+    const { errors } = this.state;
+
     return (
       <div className="login">
         <div className="container">
@@ -37,7 +55,7 @@ class Login extends Component {
                 <div className="form-group">
                   <input
                     type="email"
-                    className="form-control form-control-lg"
+                      className="form-control form-control-lg"
                     placeholder="Email Address"
                     name="email"
                     value={this.state.email}
@@ -64,4 +82,15 @@ class Login extends Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(mapStateProps,{ loginUser })(Login);
