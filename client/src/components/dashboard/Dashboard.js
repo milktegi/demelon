@@ -1,14 +1,20 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getCurrentProfile } from '../../actions/profileActions';
+import { getCurrentProfile, deleteAccount } from '../../actions/profileActions';
 import Spinner from '../common/Spinner';
+import ProfileActions from './ProfileActions';
 
 class Dashboard extends Component {
-  componentDidMount() {
+  componentDidMount = () => {
     this.props.getCurrentProfile();
   }
+
+  onDeleteClick = e => {
+    this.props.deleteAccount();
+  }
+
   render() {
     const { user } = this.props.auth;
     const { profile, loading } = this.props.profile;
@@ -20,14 +26,28 @@ class Dashboard extends Component {
     } else {
       // check if logged in user has profile data
       if (Object.keys(profile).length > 0) {
-        dashboardContent = <h4>todo : Display Profile</h4>;
+        dashboardContent = (
+          <div>
+            <p className='lead text-muted'>
+              <Link to={`/profile/${profile.handle}`}>{user.name}</Link>님 하염
+            </p>
+            <ProfileActions />
+            
+            <div style={{ marginBottom: '60ox'}}>
+              <button onClick={this.onDeleteClick}
+              className="btn btn-danger">
+                프로필 계정 삭제
+              </button>
+            </div>
+          </div>
+        );
       } else {
         // user has not profile yet
         dashboardContent = (
           <div>
-            <p className="lead text-muted">Welcome {user.name} </p>
+            <p className='lead text-muted'>Welcome {user.name} </p>
             <p> 아직 프로필이 없습니다. 새 프로필을 등록해보세요.</p>
-            <Link to="/create-profile" className="btn btn-lg btn-primary">
+            <Link to='/create-profile' className='btn btn-lg btn-primary'>
               프로필 생성
             </Link>
           </div>
@@ -36,12 +56,12 @@ class Dashboard extends Component {
     }
 
     return (
-      <div className="dashboard">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12">
-              <h1 className="dispay-4">Dashboard</h1>
-              {dashboardContent}
+      <div className='dashboard'>
+        <div className='container'>
+          <div className='row'>
+            <div className='col-md-12'>
+              <h1 className='dispay-4'>Dashboard</h1>
+              { dashboardContent }
             </div>
           </div>
         </div>
@@ -52,16 +72,17 @@ class Dashboard extends Component {
 
 Dashboard.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
+  deleteAccount: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   profile: state.profile,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(
   mapStateToProps,
-  { getCurrentProfile }
+  { getCurrentProfile, deleteAccount },
 )(Dashboard);
