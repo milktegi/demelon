@@ -1,9 +1,9 @@
 import jwt_decode from 'jwt-decode';
-import React, { Component } from 'react';
-import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { logoutUser, setCurrentUser } from './actions/authActions';
-import { clearCurrentProfile } from './actions/profileActions';
+import React, {Component} from 'react';
+import {Provider} from 'react-redux';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {logoutUser, setCurrentUser} from './actions/authActions';
+import {clearCurrentProfile} from './actions/profileActions';
 import './App.css';
 import AddEducation from './components/add-credentials/AddEducation';
 import AddExperience from './components/add-credentials/AddExperience';
