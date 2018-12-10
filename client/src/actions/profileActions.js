@@ -4,7 +4,7 @@ import {
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
   GET_ERRORS,
-  SET_CURRENT_USER
+  SET_CURRENT_USER,
 } from './types';
 
 // get current profile
@@ -45,6 +45,32 @@ export const deleteAccount = () => dispatch => {
         }),
       );
   }
+};
+
+// add expData
+export const addExperience = (expData, history) => dispatch => {
+  axios
+    .post('/api/profile/experience', expData)
+    .then(res => history.push('/dashboard'))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      }),
+    );
+};
+
+// add eduData
+export const addEducation = (eduData, history) => dispatch => {
+  axios
+    .post('/api/profile/education', eduData)
+    .then(res => history.push('/dashboard'))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      }),
+    );
 };
 
 // create
