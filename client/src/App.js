@@ -17,6 +17,7 @@ import Landing from './components/layout/Landing';
 import Navbar from './components/layout/Navbar';
 import store from './store';
 import setAuthToken from './utils/setAuthToken';
+import Profiles from './components/profiles/Profiles';
 
 if (localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
@@ -44,6 +45,7 @@ class App extends Component {
             <div className='container'>
               <Route exact path='/register' component={Register} />
               <Route exact path='/login' component={Login} />
+              <Route exact path='/profiles' component={Profiles} />
               <Switch>
                 <PrivateRoute exact path='/dashboard' component={Dashboard} />
               </Switch>
